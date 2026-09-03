@@ -1,14 +1,32 @@
 // app/layout.tsx
 import './globals.css';
-import type { Viewport } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import MobileHeader from '@/components/MobileHeader';
 import BackgroundVideo from '@/components/BackgroundVideo';
 
-export const metadata = {
+// アイコンは app/ の file convention（app/apple-icon.png など）ではなく
+// ここで明示的に指定している。file convention が出力する href には
+// キャッシュバスター用のクエリが付く（例: /apple-icon.png?apple-icon.2rsi-ah_zh2rs.png）が、
+// Safari はこの形式の apple-touch-icon を取りこぼすことがあり、
+// その際はルート直下の /apple-touch-icon.png へフォールバックする。
+// 画像を public/ に置いてクエリなしの絶対パスで指す形にすると、
+// link タグ経由・ルート直下フォールバックのどちらでも同じ画像が使われる。
+//
+// 注意: metadata.icons を明示すると app/ 配下の icon / apple-icon ファイルは
+// link タグに合流しなくなる（favicon.ico だけは常に先頭へ差し込まれる）。
+// そのため apple-icon.png は app/ に残さず public/apple-touch-icon.png へ移動済み。
+export const metadata: Metadata = {
   title: 'HAILROSE',
   description: 'HAILROSE Official Website',
+  icons: {
+    apple: {
+      url: '/apple-touch-icon.png',
+      sizes: '180x180',
+      type: 'image/png',
+    },
+  },
 };
 
 // viewport-fit=cover を指定しないと env(safe-area-inset-*) が常に 0 を返し、
