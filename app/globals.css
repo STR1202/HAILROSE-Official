@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/*
+  マウスやトラックパッドのように「ホバーできる」入力手段がある環境でだけ真になる。
+
+  幅だけで PC / タッチ端末を切り替えると、iPad の横向き（1194px など）が
+  PC 判定に入り、ホバー前提のUIが出て情報に一切たどり着けなくなる。
+  逆に iPad にキーボード（トラックパッド付き）を繋いだ場合はホバーできるので、
+  幅ではなく入力手段で判定するのが正しい。
+*/
+@custom-variant can-hover (@media (hover: hover));
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+  }
+}
+
+/* 画面移動時の横ズレ（スクロールバーの有無によるガタつき）を防止する指定 */
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/*
+  1画面ぴったりの高さ。
+  Tailwind の h-dvh は height:100dvh の1宣言だけでフォールバックが無く、
+  dvh 未対応のブラウザ（iOS Safari 15.3 以前など）では高さが auto に落ちる。
+  そうなると内側の h-full / 中央寄せが基準を失い、コンテンツが上端に寄ってしまう。
+  先に 100vh を書いておけば、未対応環境でも必ず1画面分の高さになる。
+*/
+/*
+  登場アニメーション。
+
+  framer-motion の initial={{ opacity: 0 }} は SSR の HTML に
+  style="opacity:0" として焼き込まれ、クライアント JS が走って初めて解除される。
+  そのため JS が例外で止まる・ハイドレーションに失敗すると、
+  ロゴや SNS リンクが永久に見えないまま残ってしまう（実際に発生した）。
+
+  CSS アニメーションなら「最終状態＝要素の既定のスタイル」なので、
+  JS が一切動かなくてもコンテンツは必ず表示される。
+*/
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-logo-in {
+  animation: fade-in-scale 1s ease-out both;
+}
+
+.animate-footer-in {
+  animation: fade-in-up 0.8s ease-out 0.3s both;
+}
+
+/* 「視差効果を減らす」を有効にしている端末では動かさず、最初から表示する */
+@media (prefers-reduced-motion: reduce) {
+  .animate-logo-in,
+  .animate-footer-in {
+    animation: none;
+  }
+}
+
+/*
+  画像の長押し保存・ドラッグ・選択を抑止する。
+
+  ⚠ これは「コピー防止」ではなく「手間を増やす」だけの措置。
+  スクリーンショット、開発者ツール、ネットワークタブ、画像URLへの直アクセスは
+  一切防げない。ブラウザに表示する以上、画像データは必ず閲覧者の端末に届いている。
+  防げるのは iOS / Android の長押しメニューからの保存という、
+  スマホで最も手軽な経路のみ。
+
+  JS（contextmenu の preventDefault 等）を使わず CSS だけで完結させているのは、
+  スクリプトが止まっても抑止が外れないようにするため。
+*/
+.no-image-save {
+  -webkit-touch-callout: none; /* iOS Safari の長押しメニューを出さない */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.no-image-save img {
+  -webkit-user-drag: none; /* デスクトップでのドラッグ＆ドロップ持ち出しを防ぐ */
+  pointer-events: none;
+}
+
+@utility h-screen-safe {
+  height: 100vh;
+
+  /* 同じ宣言を2行並べる書き方だと、ビルド時の最適化で
+     後勝ちの1行に潰されてフォールバックが消える（実際に消えた）。
+     @supports で囲めば別ルールとして残る。 */
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
+}
