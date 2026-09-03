@@ -19,7 +19,7 @@ import BackgroundVideo from '@/components/BackgroundVideo';
 // そのため apple-icon.png は app/ に残さず public/apple-touch-icon.png へ移動済み。
 export const metadata: Metadata = {
   title: 'HAILROSE',
-  description: 'HAILROSE Official Website',
+  description: 'HAILROSE（ヘイルローズ） Official Website',
   icons: {
     apple: {
       url: '/apple-touch-icon.png',
