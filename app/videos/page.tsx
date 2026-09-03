@@ -1,6 +1,12 @@
 import Image from 'next/image';
 import { client, VideoItem } from '@/libs/microcms';
 
+// microCMS の更新をサイトに反映させるための ISR（再検証）設定。
+// 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
+// 60 秒を過ぎた後の最初のアクセスをきっかけに裏側で再生成し、
+// その完了以降のアクセスが新しい内容になる（生成中も古い内容を即座に返す）。
+export const revalidate = 60;
+
 // microCMSからVIDEOS一覧を取得
 async function getVideoList(): Promise<VideoItem[]> {
   try {
