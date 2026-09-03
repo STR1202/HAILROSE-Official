@@ -7,7 +7,7 @@ import MobileHeader from '@/components/MobileHeader';
 import BackgroundVideo from '@/components/BackgroundVideo';
 
 export const metadata = {
-  title: 'HAILROSE Official',
+  title: 'HAILROSE',
   description: 'HAILROSE Official Website',
 };
 
