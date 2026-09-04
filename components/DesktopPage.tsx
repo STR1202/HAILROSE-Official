@@ -8,13 +8,25 @@ import {
   SiApplemusic 
 } from 'react-icons/si';
 
-const socialLinks = [
-  { name: 'YouTube', href: 'https://www.youtube.com/@hailrose_droid', icon: SiYoutube },
-  { name: 'X (Twitter)', href: 'https://x.com/HAILROSE_droid', icon: SiX },
-  { name: 'Instagram', href: 'https://www.instagram.com/nudigitalhcjp/', icon: SiInstagram },
-  { name: 'Spotify', href: 'https://open.spotify.com/intl-ja/artist/4Y8fSqvFWOtl3lWwZJh91p', icon: SiSpotify },
-  { name: 'Apple Music', href: 'https://music.apple.com/jp/artist/hailrose/1517272909', icon: SiApplemusic },
-];
+import type { IconType } from 'react-icons';
+import { SOCIAL_LINKS } from '@/libs/site';
+
+/*
+  URL は libs/site.ts の SOCIAL_LINKS を唯一の出どころにしている。
+  同じ一覧を構造化データの sameAs（「この名前の実体はこれらのアカウント」という
+  検索エンジンへの申告）でも使うため、ここに URL を直書きすると片方だけ古くなり、
+  申告と実際のリンクが食い違う。
+
+  Record のキーを SOCIAL_LINKS の name に固定しているので、site.ts に
+  リンクを足してアイコンを足し忘れると型エラーで気づける。
+*/
+const ICONS: Record<(typeof SOCIAL_LINKS)[number]['name'], IconType> = {
+  YouTube: SiYoutube,
+  'X (Twitter)': SiX,
+  Instagram: SiInstagram,
+  Spotify: SiSpotify,
+  'Apple Music': SiApplemusic,
+};
 
 export default function TopPage() {
   return (
@@ -30,7 +42,7 @@ export default function TopPage() {
         >
           <Image
             src="/logo.png"
-            alt="BAND LOGO"
+            alt="HAILROSE"
             fill
             draggable={false}
             sizes="(max-width: 1200px) 50vw, 33vw"
@@ -47,8 +59,8 @@ export default function TopPage() {
           className="animate-footer-in flex flex-col items-center justify-center"
         >
           <div className="flex items-center gap-6 md:gap-8 bg-black/40 backdrop-blur-md px-7 py-3 rounded-full border border-white/10 shadow-lg">
-            {socialLinks.map((social) => {
-              const Icon = social.icon;
+            {SOCIAL_LINKS.map((social) => {
+              const Icon = ICONS[social.name];
               return (
                 <a
                   key={social.name}

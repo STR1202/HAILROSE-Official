@@ -5,6 +5,13 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import MobileHeader from '@/components/MobileHeader';
 import BackgroundVideo from '@/components/BackgroundVideo';
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_LINKS,
+  X_HANDLE,
+} from '@/libs/site';
 
 // アイコンは app/ の file convention（app/icon.*, app/apple-icon.*, app/favicon.ico）
 // ではなく、画像を public/ に置いてここで明示的に指定している。理由は2つ。
@@ -25,8 +32,79 @@ import BackgroundVideo from '@/components/BackgroundVideo';
 //
 // 画像はいずれも同一の元データ（黒地に HAILROSE ロゴ）から生成した正方形。
 export const metadata: Metadata = {
-  title: 'HAILROSE',
-  description: 'HAILROSE（ヘイルローズ） Official Website',
+  // 相対パスの canonical / OGP 画像を絶対 URL に展開する基準。
+  // これが無いと alternates.canonical や openGraph.images に相対パスを書けず、
+  // 開発中は localhost が焼き込まれた URL が出力されてしまう。
+  metadataBase: new URL(SITE_URL),
+
+  // default はトップページ用。template は各ページが title に文字列を
+  // 指定したときに適用され、「MUSIC | HAILROSE」の形になる。
+  // トップだけはサイト名の重複を避けたいので default を別に持たせている。
+  title: {
+    default: `${SITE_NAME} | オフィシャルサイト`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    'HAILROSE',
+    'ヘイルローズ',
+    'ヘイルローズ バンド',
+    'HAILROSE 公式',
+    'ライブ',
+    'ライブスケジュール',
+    'ミュージックビデオ',
+    'バンド',
+  ],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+
+  // 各ページは alternates.canonical に自分のパスを設定して上書きする。
+  // canonical が無いと、末尾スラッシュ有無・クエリ付きの URL（SNS の
+  // ?fbclid=... など）が別ページとして扱われ、評価が分散する。
+  alternates: { canonical: '/' },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // 既定ではサムネイルが小さく切られる。大きい画像・長いスニペットを
+      // 許可しておくと検索結果での占有面積が増える。
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: `${SITE_NAME} | オフィシャルサイト`,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} ロゴ`,
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    site: X_HANDLE,
+    creator: X_HANDLE,
+    title: `${SITE_NAME} | オフィシャルサイト`,
+    description: SITE_DESCRIPTION,
+    images: ['/og-image.png'],
+  },
+
   icons: {
     icon: [
       { url: '/icon-32.png', sizes: '32x32', type: 'image/png' },
@@ -50,6 +128,44 @@ export const viewport: Viewport = {
   themeColor: '#000000',
 };
 
+/**
+ * 構造化データ（JSON-LD）。
+ *
+ * meta タグは「このページは何か」しか伝えられないが、構造化データは
+ * 「HAILROSE という音楽グループが実体としてあり、その公式サイトがここで、
+ * SNS アカウントはこれら」という関係を明示できる。同名の別物と混同されにくくなり、
+ * ナレッジパネルやサイトリンクの対象にもなる。
+ *
+ * @graph に複数のエンティティを入れ、@id で相互参照する形が推奨される書き方。
+ * 記載するのはサイト上で実際に確認できる事実のみ（ジャンルやメンバー構成などの
+ * 裏取りできない項目は、誤りが構造化データとして固定されるので入れない）。
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'MusicGroup',
+      '@id': `${SITE_URL}/#musicgroup`,
+      name: SITE_NAME,
+      alternateName: 'ヘイルローズ',
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+      image: `${SITE_URL}/og-image.png`,
+      logo: `${SITE_URL}/og-image.png`,
+      // 「この名前の実体はこれらのアカウントと同一」という宣言。
+      sameAs: SOCIAL_LINKS.map((link) => link.href),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: `${SITE_NAME} オフィシャルサイト`,
+      url: SITE_URL,
+      inLanguage: 'ja-JP',
+      publisher: { '@id': `${SITE_URL}/#musicgroup` },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -67,6 +183,17 @@ export default function RootLayout({
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className="bg-black text-white font-sans selection:bg-red-600 selection:text-white antialiased">
+        {/*
+          構造化データ。値はすべてこのファイル内の定数なので外部入力は混ざらないが、
+          JSON.stringify は </script> を無害化しないため、'<' はエスケープしておく。
+        */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+          }}
+        />
+
         {/*
           背景：スマホは静止画（bg-image.jpg）、PC は動画。
 

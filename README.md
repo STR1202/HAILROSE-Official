@@ -59,9 +59,29 @@ app/
   merch/              MERCH     … COMING SOON（静的）
   contact/            CONTACT   … 問い合わせフォーム
   api/contact/        フォーム送信先（Node.js ランタイム / 動的）
+  robots.ts           /robots.txt を生成
+  sitemap.ts          /sitemap.xml を生成（lastmod は microCMS の revisedAt）
 components/           Header, MobileHeader, BackgroundVideo, Desktop/MobilePage
 libs/microcms.ts      microCMS クライアントと各コンテンツの型定義
+libs/site.ts          サイト URL・SNS リンク・ページ共通メタデータの生成
 ```
+
+## SEO
+
+- **メタデータ** — 共通部分は `app/layout.tsx`、各ページは `libs/site.ts` の
+  `buildPageMetadata()` で組み立てる。`openGraph` / `twitter` は入れ子ごと
+  後勝ちで置き換わる仕様のため、ページ側では毎回すべて指定する必要がある。
+  その繰り返しをヘルパーに集約している。
+- **canonical** — 全ページに設定済み。SNS 経由のクエリ付き URL
+  （`?fbclid=...` など）が別ページ扱いされて評価が分散するのを防ぐ。
+- **OGP 画像** — `public/og-image.png`（1200x630）。`public/logo.png` を
+  黒地の中央に配置したもの。
+- **構造化データ** — `app/layout.tsx` に JSON-LD（`MusicGroup` + `WebSite`）。
+  `sameAs` は `libs/site.ts` の `SOCIAL_LINKS` から生成するので、
+  トップページに表示している SNS リンクと必ず一致する。
+  裏取りできない項目（ジャンル・メンバー構成など）は意図的に入れていない。
+- **公開後にやること** — Google Search Console にサイトを登録し、
+  `https://hailrose.com/sitemap.xml` を送信する。これはコード側では完結しない。
 
 ## Vercel へのデプロイ
 

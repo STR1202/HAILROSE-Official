@@ -2,6 +2,14 @@
 import Image from 'next/image';
 import { client, NewsItem } from '@/libs/microcms';
 import NewsList from './NewsList';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'NEWS',
+  description:
+    'HAILROSE（ヘイルローズ）からの最新のお知らせ・ニュース一覧。',
+  path: '/news',
+});
 
 // microCMS の更新をサイトに反映させるための ISR（再検証）設定。
 // 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
@@ -52,7 +60,7 @@ export default async function NewsPage() {
           
           {/* NEWS タイトル & 破線セパレーター */}
           <div className="w-full flex items-center gap-4 mb-10 md:mb-14">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">NEWS</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">NEWS</h1>
             <div className="grow border-b border-dashed border-white/60"></div>
           </div>
 

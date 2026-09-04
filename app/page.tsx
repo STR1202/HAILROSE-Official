@@ -6,6 +6,17 @@ export default function TopPage() {
   return (
     <>
       {/*
+        トップページは中身がロゴ画像だけで、クローラから見ると
+        テキストが1文字も無いページになる。h1 を1つ置いて
+        「このページは何なのか」を伝える。sr-only は視覚的には
+        見えないがスクリーンリーダーと検索エンジンからは読める。
+
+        Desktop / Mobile は両方 DOM に出るため h1 をそれぞれに置くと
+        1ページに2つ並ぶ。ここに1つだけ置いて重複を避ける。
+      */}
+      <h1 className="sr-only">HAILROSE（ヘイルローズ）オフィシャルサイト</h1>
+
+      {/*
         スマホ・タブレット縦向け（〜1023px）とPC（1024px〜）でトップページを出し分ける。
 
         以前は User-Agent（/mobile|android|iphone|ipad|ipod/）で判定していたが、

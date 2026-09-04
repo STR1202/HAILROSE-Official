@@ -1,5 +1,13 @@
 import Image from 'next/image';
 import { client, VideoItem } from '@/libs/microcms';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'VIDEOS',
+  description:
+    'HAILROSE（ヘイルローズ）のミュージックビデオ・ライブ映像の一覧。',
+  path: '/videos',
+});
 
 // microCMS の更新をサイトに反映させるための ISR（再検証）設定。
 // 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
@@ -49,7 +57,7 @@ export default async function VideosPage() {
           
           {/* VIDEOS タイトル */}
           <div className="w-full flex items-center gap-4 mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">VIDEOS</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">VIDEOS</h1>
             <div className="grow h-px bg-white/60"></div>
           </div>
 

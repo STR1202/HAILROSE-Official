@@ -1,6 +1,14 @@
 import Image from 'next/image';
 import { client, MusicItem } from '@/libs/microcms';
 import MusicGrid from './MusicGrid';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'MUSIC',
+  description:
+    'HAILROSE（ヘイルローズ）のリリース楽曲一覧。ジャケットと各配信サービスへのリンクを掲載しています。',
+  path: '/music',
+});
 
 // microCMS の更新をサイトに反映させるための ISR（再検証）設定。
 // 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
@@ -50,7 +58,7 @@ export default async function MusicPage() {
           
           {/* MUSIC タイトル */}
           <div className="w-full flex items-center gap-4 mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">MUSIC</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">MUSIC</h1>
             <div className="grow h-px bg-white/60"></div>
           </div>
 

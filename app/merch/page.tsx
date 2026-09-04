@@ -1,4 +1,12 @@
 import Image from 'next/image';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'MERCH',
+  description:
+    'HAILROSE（ヘイルローズ）のオフィシャルグッズ。オンラインストアは現在準備中です。',
+  path: '/merch',
+});
 
 export default function MerchPage() {
   return (
@@ -24,7 +32,7 @@ export default function MerchPage() {
           
           {/* MERCH タイトル & 破線セパレーター */}
           <div className="w-full flex items-center gap-4 mb-10 md:mb-14">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">MERCH</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">MERCH</h1>
             <div className="grow border-b border-dashed border-white/60"></div>
           </div>
 

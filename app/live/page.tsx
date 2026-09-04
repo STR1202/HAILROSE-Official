@@ -1,5 +1,13 @@
 import Image from 'next/image';
 import { client, LiveItem } from '@/libs/microcms';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'LIVE',
+  description:
+    'HAILROSE（ヘイルローズ）のライブスケジュール。出演日・会場・チケット情報を掲載しています。',
+  path: '/live',
+});
 
 // microCMS の更新をサイトに反映させるための ISR（再検証）設定。
 // 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
@@ -59,7 +67,7 @@ export default async function LivePage() {
           
           {/* LIVE タイトル & 破線セパレーター */}
           <div className="w-full flex items-center gap-4 mb-10 md:mb-14">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">LIVE</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">LIVE</h1>
             <div className="grow border-b border-dashed border-white/60"></div>
           </div>
 

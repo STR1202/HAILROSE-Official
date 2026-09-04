@@ -8,13 +8,25 @@ import {
   SiApplemusic,
 } from 'react-icons/si';
 
-const socialLinks = [
-  { name: 'YouTube', href: 'https://www.youtube.com/@hailrose_droid', icon: SiYoutube },
-  { name: 'X (Twitter)', href: 'https://x.com/HAILROSE_droid', icon: SiX },
-  { name: 'Instagram', href: 'https://www.instagram.com/nudigitalhcjp/', icon: SiInstagram },
-  { name: 'Spotify', href: 'https://open.spotify.com/intl-ja/artist/4Y8fSqvFWOtl3lWwZJh91p', icon: SiSpotify },
-  { name: 'Apple Music', href: 'https://music.apple.com/jp/artist/hailrose/1517272909', icon: SiApplemusic },
-];
+import type { IconType } from 'react-icons';
+import { SOCIAL_LINKS } from '@/libs/site';
+
+/*
+  URL は libs/site.ts の SOCIAL_LINKS を唯一の出どころにしている。
+  同じ一覧を構造化データの sameAs（「この名前の実体はこれらのアカウント」という
+  検索エンジンへの申告）でも使うため、ここに URL を直書きすると片方だけ古くなり、
+  申告と実際のリンクが食い違う。
+
+  Record のキーを SOCIAL_LINKS の name に固定しているので、site.ts に
+  リンクを足してアイコンを足し忘れると型エラーで気づける。
+*/
+const ICONS: Record<(typeof SOCIAL_LINKS)[number]['name'], IconType> = {
+  YouTube: SiYoutube,
+  'X (Twitter)': SiX,
+  Instagram: SiInstagram,
+  Spotify: SiSpotify,
+  'Apple Music': SiApplemusic,
+};
 
 // 登場アニメーションは CSS（globals.css）で行う。
 // framer-motion を使うと SSR に opacity:0 が焼き込まれ、
@@ -65,8 +77,8 @@ export default function MobilePage() {
         "
       >
         <div className="flex flex-wrap justify-center items-center gap-2 max-w-[95%] bg-black/60 backdrop-blur-md px-4 py-2 rounded-4xl border border-white/10 shadow-2xl">
-          {socialLinks.map((social) => {
-            const Icon = social.icon;
+          {SOCIAL_LINKS.map((social) => {
+            const Icon = ICONS[social.name];
             return (
               <a
                 key={social.name}

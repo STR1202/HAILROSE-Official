@@ -1,6 +1,14 @@
 // app/contact/page.tsx
 import Image from 'next/image';
 import ContactForm from './ContactForm';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'CONTACT',
+  description:
+    'HAILROSE（ヘイルローズ）へのお問い合わせフォーム。出演依頼・取材・ご質問はこちらから。',
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (
@@ -48,9 +56,9 @@ export default function ContactPage() {
         <div className="w-full max-w-3xl flex flex-col items-center">
           {/* CONTACT タイトル & 破線セパレーター */}
           <div className="w-full flex items-center gap-4 mb-6 md:mb-8 text-white">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">
               CONTACT
-            </h2>
+            </h1>
             <div className="grow border-b border-dashed border-white/60" />
           </div>
 

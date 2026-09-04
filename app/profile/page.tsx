@@ -1,6 +1,14 @@
 // app/profile/page.tsx
 import Image from 'next/image';
 import { client, ProfileItem } from '@/libs/microcms';
+import { buildPageMetadata } from '@/libs/site';
+
+export const metadata = buildPageMetadata({
+  title: 'PROFILE',
+  description:
+    'HAILROSE（ヘイルローズ）のプロフィール。アーティスト写真とバイオグラフィーを掲載しています。',
+  path: '/profile',
+});
 
 // microCMS の更新をサイトに反映させるための ISR（再検証）設定。
 // 未指定だと build 時に一度だけ生成され、再デプロイするまで内容が固定される。
@@ -33,7 +41,7 @@ export default async function ProfilePage() {
           
           {/* PROFILE タイトル */}
           <div className="w-full flex items-center gap-4 mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">PROFILE</h2>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase">PROFILE</h1>
             <div className="grow h-px bg-white/60"></div>
           </div>
 
