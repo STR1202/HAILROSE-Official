@@ -1,7 +1,7 @@
 // app/news/page.tsx
 import Image from 'next/image';
-import { client, NewsItem } from '@/libs/microcms';
 import NewsList from './NewsList';
+import { getNewsList } from '@/libs/news';
 import { buildPageMetadata } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
@@ -16,23 +16,6 @@ export const metadata = buildPageMetadata({
 // 60 秒を過ぎた後の最初のアクセスをきっかけに裏側で再生成し、
 // その完了以降のアクセスが新しい内容になる（生成中も古い内容を即座に返す）。
 export const revalidate = 60;
-
-// microCMSからNEWS一覧を取得（公開日の降順）
-async function getNewsList(): Promise<NewsItem[]> {
-  try {
-    const data = await client.get({
-      endpoint: 'news',
-      queries: {
-        orders: '-publishedAt',
-        limit: 100,
-      },
-    });
-    return data.contents;
-  } catch (error) {
-    console.error('microCMS Fetch Error:', error);
-    return [];
-  }
-}
 
 export default async function NewsPage() {
   const newsList = await getNewsList();

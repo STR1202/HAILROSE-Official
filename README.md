@@ -56,15 +56,47 @@ app/
   videos/             VIDEOS    … microCMS `videos`
   live/               LIVE      … microCMS `live`
   news/               NEWS      … microCMS `news`
+    page.tsx            一覧（各行が /news/[id] への実リンク）
+    [id]/page.tsx       記事ページ（共有・クロール対象）
+    @modal/(.)[id]/     一覧から開いたときのモーダル（Intercepting Routes）
   merch/              MERCH     … COMING SOON（静的）
   contact/            CONTACT   … 問い合わせフォーム
   api/contact/        フォーム送信先（Node.js ランタイム / 動的）
   robots.ts           /robots.txt を生成
   sitemap.ts          /sitemap.xml を生成（lastmod は microCMS の revisedAt）
 components/           Header, MobileHeader, BackgroundVideo, Desktop/MobilePage
+                      NewsArticle（記事本文・記事ページとモーダルで共用）
+                      NewsModal（モーダルの外枠）
 libs/microcms.ts      microCMS クライアントと各コンテンツの型定義
+libs/news.ts          NEWS の取得・日付整形・description 生成
 libs/site.ts          サイト URL・SNS リンク・ページ共通メタデータの生成
 ```
+
+## NEWS 記事のルーティング
+
+記事は `/news/[id]` という独立した URL を持ち、共有もインデックスもできる。
+一方で一覧からタップしたときは従来どおり全画面モーダルで開く。この2つを
+**Parallel Routes + Intercepting Routes** で両立させている。
+
+| 入り口 | 表示されるもの |
+| ------ | -------------- |
+| 一覧 `/news` からリンクをタップ | 一覧の上にモーダル。URL は `/news/[id]` に変わる |
+| `/news/[id]` を直接開く・リロード | 通常の記事ページ |
+| 共有リンク・検索エンジンのクローラ | 通常の記事ページ |
+
+- 横取りが起きるのはクライアント側遷移のときだけ。サーバーへのリクエストは
+  常に `app/news/[id]/page.tsx` に届くので、クローラがモーダルを見ることはない。
+- 中身は `components/NewsArticle.tsx` を両方から使う。片方だけ本文の出し方が
+  変わると、モーダルで読んだ内容と共有リンクの内容が食い違うため。
+- モーダルを閉じると `router.back()` で `/news` に戻る。ブラウザの戻る／進むとも
+  噛み合う。
+- `app/news/@modal/default.tsx` が `null` を返すのは必須。これが無いと
+  `/news` や `/news/[id]` の直接アクセスでスロットを解決できず 404 になる。
+- 記事の追加に再デプロイは不要。`generateStaticParams` に載らなかった新しい記事も
+  初回アクセス時に生成されてキャッシュされる（`dynamicParams` の既定が `true`）。
+- モーダルを開いている間のタブ名は一覧のまま（`NEWS | HAILROSE`）。`<title>` は
+  children スロット側で決まるため。検索エンジンが見るのは記事ページなので
+  インデックスには影響しない。
 
 ## SEO
 
@@ -76,7 +108,8 @@ libs/site.ts          サイト URL・SNS リンク・ページ共通メタデ�
   （`?fbclid=...` など）が別ページ扱いされて評価が分散するのを防ぐ。
 - **OGP 画像** — `public/og-image.png`（1200x630）。`public/logo.png` を
   黒地の中央に配置したもの。
-- **構造化データ** — `app/layout.tsx` に JSON-LD（`MusicGroup` + `WebSite`）。
+- **構造化データ** — `app/layout.tsx` に JSON-LD（`MusicGroup` + `WebSite`）、
+  記事ページに `NewsArticle`（`author` / `publisher` は `@id` で `MusicGroup` を参照）。
   `sameAs` は `libs/site.ts` の `SOCIAL_LINKS` から生成するので、
   トップページに表示している SNS リンクと必ず一致する。
   裏取りできない項目（ジャンル・メンバー構成など）は意図的に入れていない。

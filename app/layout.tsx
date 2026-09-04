@@ -37,11 +37,10 @@ export const metadata: Metadata = {
   // 開発中は localhost が焼き込まれた URL が出力されてしまう。
   metadataBase: new URL(SITE_URL),
 
-  // default はトップページ用。template は各ページが title に文字列を
-  // 指定したときに適用され、「MUSIC | HAILROSE」の形になる。
-  // トップだけはサイト名の重複を避けたいので default を別に持たせている。
+  // default はトップページの <title>。サイト名だけにする。
+  // template は下層ページ用で「MUSIC | HAILROSE」の形になる。
   title: {
-    default: `${SITE_NAME} | オフィシャルサイト`,
+    default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -84,7 +83,7 @@ export const metadata: Metadata = {
     locale: 'ja_JP',
     siteName: SITE_NAME,
     url: SITE_URL,
-    title: `${SITE_NAME} | オフィシャルサイト`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     images: [
       {
@@ -100,7 +99,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: X_HANDLE,
     creator: X_HANDLE,
-    title: `${SITE_NAME} | オフィシャルサイト`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     images: ['/og-image.png'],
   },
@@ -158,7 +157,7 @@ const jsonLd = {
     {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
-      name: `${SITE_NAME} オフィシャルサイト`,
+      name: SITE_NAME,
       url: SITE_URL,
       inLanguage: 'ja-JP',
       publisher: { '@id': `${SITE_URL}/#musicgroup` },

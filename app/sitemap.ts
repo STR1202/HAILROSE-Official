@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { client } from '@/libs/microcms';
+import { getNewsList } from '@/libs/news';
 import { SITE_URL } from '@/libs/site';
 
 // サイトマップ自体も静的生成される。microCMS を毎リクエスト叩かないよう
@@ -38,9 +39,19 @@ async function getLastModified(endpoint: string): Promise<Date | null> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [news, live, music, videos, profile] = await Promise.all(
-    ['news', 'live', 'music', 'videos', 'profile'].map(getLastModified)
-  );
+  const [[news, live, music, videos, profile], newsItems] = await Promise.all([
+    Promise.all(['news', 'live', 'music', 'videos', 'profile'].map(getLastModified)),
+    getNewsList(),
+  ]);
+
+  // NEWS の各記事（/news/[id]）。記事は一覧からのリンクでも辿れるが、
+  // サイトマップに載せておくと新着が見つかるまでの時間が短くなる。
+  const newsEntries: MetadataRoute.Sitemap = newsItems.map((item) => ({
+    url: `${SITE_URL}/news/${item.id}`,
+    lastModified: new Date(item.revisedAt),
+    changeFrequency: 'yearly',
+    priority: 0.6,
+  }));
 
   // 静的ページ（トップ / MERCH / CONTACT）には lastModified を付けない。
   // ビルド時刻を入れると、内容が変わっていないのにデプロイのたびに
@@ -80,5 +91,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     { url: `${SITE_URL}/contact`, changeFrequency: 'yearly', priority: 0.5 },
     { url: `${SITE_URL}/merch`, changeFrequency: 'monthly', priority: 0.3 },
+    ...newsEntries,
   ];
 }
