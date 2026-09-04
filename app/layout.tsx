@@ -6,21 +6,32 @@ import Header from '@/components/Header';
 import MobileHeader from '@/components/MobileHeader';
 import BackgroundVideo from '@/components/BackgroundVideo';
 
-// アイコンは app/ の file convention（app/apple-icon.png など）ではなく
-// ここで明示的に指定している。file convention が出力する href には
-// キャッシュバスター用のクエリが付く（例: /apple-icon.png?apple-icon.2rsi-ah_zh2rs.png）が、
-// Safari はこの形式の apple-touch-icon を取りこぼすことがあり、
-// その際はルート直下の /apple-touch-icon.png へフォールバックする。
-// 画像を public/ に置いてクエリなしの絶対パスで指す形にすると、
-// link タグ経由・ルート直下フォールバックのどちらでも同じ画像が使われる。
+// アイコンは app/ の file convention（app/icon.*, app/apple-icon.*, app/favicon.ico）
+// ではなく、画像を public/ に置いてここで明示的に指定している。理由は2つ。
 //
-// 注意: metadata.icons を明示すると app/ 配下の icon / apple-icon ファイルは
-// link タグに合流しなくなる（favicon.ico だけは常に先頭へ差し込まれる）。
-// そのため apple-icon.png は app/ に残さず public/apple-touch-icon.png へ移動済み。
+// 1. file convention が出力する href にはキャッシュバスター用のクエリが付く
+//    （例: /apple-icon.png?apple-icon.2rsi-ah_zh2rs.png）。Safari はこの形式の
+//    apple-touch-icon を取りこぼすことがあり、その際はルート直下の
+//    /apple-touch-icon.png へフォールバックする。public/ にクエリなしで置けば
+//    link タグ経由・ルート直下フォールバックのどちらでも同じ画像に到達する。
+//    /favicon.ico も同様にルート直下を直接叩かれても 200 で返る。
+//
+// 2. iOS Safari のタブ一覧はタブのファビコン（rel="icon"）を使うが、WebKit は
+//    ICO よりも PNG のファビコンの方が確実に表示される。app/favicon.ico を置いた
+//    ままだと Next.js が ICO の link タグを rel="icon" の先頭に必ず差し込むため、
+//    それを避けるべく favicon.ico も public/ へ移し、link タグは PNG のみにした。
+//    ICO はファイル自体を残してあるので、ルート直下 /favicon.ico を前提にする
+//    古いブラウザやクローラからは引き続き取得できる。
+//
+// 画像はいずれも同一の元データ（黒地に HAILROSE ロゴ）から生成した正方形。
 export const metadata: Metadata = {
   title: 'HAILROSE',
   description: 'HAILROSE（ヘイルローズ） Official Website',
   icons: {
+    icon: [
+      { url: '/icon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
     apple: {
       url: '/apple-touch-icon.png',
       sizes: '180x180',
