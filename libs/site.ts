@@ -16,8 +16,7 @@ export const SITE_NAME = 'HAILROSE';
 
 /** 検索結果・SNS カードに出る既定の説明文。 */
 export const SITE_DESCRIPTION =
-  'HAILROSE（ヘイルローズ）オフィシャルサイト。最新ニュース、ライブスケジュール、' +
-  '音源、ミュージックビデオ、プロフィールを掲載しています。';
+  'HAILROSE（ヘイルローズ）Official Website';
 
 /**
  * SNS の公式アカウント。
