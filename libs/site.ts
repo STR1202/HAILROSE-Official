@@ -56,7 +56,7 @@ export const OG_IMAGE = '/og-image.png';
  * そのため各ページで openGraph / twitter を毎回すべて指定する必要があり、
  * その繰り返しをここに集約している。
  *
- * @param title ページ名（`%s | HAILROSE` のテンプレートに入る短い文字列）
+ * @param title ページ名（`HAILROSE｜%s` のテンプレートに入る短い文字列）
  * @param description そのページ固有の説明文
  * @param path 先頭スラッシュ付きのパス。canonical と og:url に使う
  */
@@ -69,7 +69,7 @@ export function buildPageMetadata({
   description: string;
   path: string;
 }): Metadata {
-  const pageTitle = `${title} | ${SITE_NAME}`;
+  const pageTitle = `${SITE_NAME}｜${title}`;
 
   return {
     title,

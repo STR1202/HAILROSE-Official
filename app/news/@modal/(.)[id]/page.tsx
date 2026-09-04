@@ -21,7 +21,7 @@ const TITLE_ID = 'news-detail-title';
  * 変わると、モーダルで読んだ内容と共有リンクの内容が食い違うことになる。
  *
  * なお <title> は children スロット（＝一覧ページ）のものが残るため、
- * モーダルを開いている間のタブ名は「NEWS | HAILROSE」のまま。検索エンジンが
+ * モーダルを開いている間のタブ名は「HAILROSE｜NEWS」のまま。検索エンジンが
  * 見るのは横取りの起きない記事ページなので、インデックスには影響しない。
  */
 export default async function InterceptedNewsPage({

@@ -38,10 +38,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   // default はトップページの <title>。サイト名だけにする。
-  // template は下層ページ用で「MUSIC | HAILROSE」の形になる。
+  // template は下層ページ用で「HAILROSE｜MUSIC」の形になる。
   title: {
     default: SITE_NAME,
-    template: `%s | ${SITE_NAME}`,
+    template: `${SITE_NAME}｜%s`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
