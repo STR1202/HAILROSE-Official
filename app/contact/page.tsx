@@ -1,12 +1,11 @@
 // app/contact/page.tsx
 import Image from 'next/image';
 import ContactForm from './ContactForm';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'CONTACT',
-  description:
-    'HAILROSE（ヘイルローズ）へのお問い合わせフォーム。出演依頼・取材・ご質問はこちらから。',
+  description: SITE_DESCRIPTION,
   path: '/contact',
 });
 

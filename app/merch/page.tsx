@@ -1,10 +1,9 @@
 import Image from 'next/image';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'MERCH',
-  description:
-    'HAILROSE（ヘイルローズ）のオフィシャルグッズ。オンラインストアは現在準備中です。',
+  description: SITE_DESCRIPTION,
   path: '/merch',
 });
 

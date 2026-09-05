@@ -1,12 +1,11 @@
 // app/profile/page.tsx
 import Image from 'next/image';
 import { client, ProfileItem } from '@/libs/microcms';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'PROFILE',
-  description:
-    'HAILROSE（ヘイルローズ）のプロフィール。アーティスト写真とバイオグラフィーを掲載しています。',
+  description: SITE_DESCRIPTION,
   path: '/profile',
 });
 

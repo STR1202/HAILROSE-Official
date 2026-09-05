@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import { client, MusicItem } from '@/libs/microcms';
 import MusicGrid from './MusicGrid';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'MUSIC',
-  description:
-    'HAILROSE（ヘイルローズ）のリリース楽曲一覧。ジャケットと各配信サービスへのリンクを掲載しています。',
+  description: SITE_DESCRIPTION,
   path: '/music',
 });
 

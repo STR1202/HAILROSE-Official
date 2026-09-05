@@ -2,12 +2,11 @@
 import Image from 'next/image';
 import NewsList from './NewsList';
 import { getNewsList } from '@/libs/news';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'NEWS',
-  description:
-    'HAILROSE（ヘイルローズ）からの最新のお知らせ・ニュース一覧。',
+  description: SITE_DESCRIPTION,
   path: '/news',
 });
 

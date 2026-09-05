@@ -56,7 +56,8 @@ export const OG_IMAGE = '/og-image.png';
  * その繰り返しをここに集約している。
  *
  * @param title ページ名（`HAILROSE｜%s` のテンプレートに入る短い文字列）
- * @param description そのページ固有の説明文
+ * @param description ページの説明文。現状はどのページも SITE_DESCRIPTION を渡して
+ *   トップページと同じ文言に揃えているが、ページごとに変えられるよう引数のままにしてある
  * @param path 先頭スラッシュ付きのパス。canonical と og:url に使う
  */
 export function buildPageMetadata({

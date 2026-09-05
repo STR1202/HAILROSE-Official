@@ -1,11 +1,10 @@
 import Image from 'next/image';
 import { client, VideoItem } from '@/libs/microcms';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'VIDEOS',
-  description:
-    'HAILROSE（ヘイルローズ）のミュージックビデオ・ライブ映像の一覧。',
+  description: SITE_DESCRIPTION,
   path: '/videos',
 });
 

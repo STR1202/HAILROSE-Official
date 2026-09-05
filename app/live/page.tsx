@@ -1,11 +1,10 @@
 import Image from 'next/image';
 import { client, LiveItem } from '@/libs/microcms';
-import { buildPageMetadata } from '@/libs/site';
+import { buildPageMetadata, SITE_DESCRIPTION } from '@/libs/site';
 
 export const metadata = buildPageMetadata({
   title: 'LIVE',
-  description:
-    'HAILROSE（ヘイルローズ）のライブスケジュール。出演日・会場・チケット情報を掲載しています。',
+  description: SITE_DESCRIPTION,
   path: '/live',
 });
 
