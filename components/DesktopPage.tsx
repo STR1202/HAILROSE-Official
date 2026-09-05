@@ -38,7 +38,7 @@ export default function TopPage() {
       {/* 画面中央：ロゴエリア */}
       <section className="relative z-10 w-full h-full flex items-center justify-center px-6">
         <div
-          className="no-image-save animate-logo-in relative w-full max-w-3xl aspect-4152/2197 flex items-center justify-center"
+          className="no-image-save animate-logo-in relative w-full max-w-3xl aspect-4721/2005 flex items-center justify-center"
         >
           <Image
             src="/logo.png"

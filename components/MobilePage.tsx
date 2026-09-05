@@ -45,8 +45,8 @@ export default function MobilePage() {
         直接張り付くので、高さの解決に失敗しても中央から外れない。
       */}
       <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
-        {/* aspect は logo.png の実寸 4152x2197。比率を合わせると object-contain の余白が出ない */}
-        <div className="no-image-save animate-logo-in relative w-[82%] max-w-md sm:max-w-lg md:max-w-xl aspect-4152/2197">
+        {/* aspect は logo.png の実寸 4721x2005。比率を合わせると object-contain の余白が出ない */}
+        <div className="no-image-save animate-logo-in relative w-[82%] max-w-md sm:max-w-lg md:max-w-xl aspect-4721/2005">
           <Image
             src="/logo.png"
             alt="HAILROSE"
